@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>Consult doctor</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="myjs.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
+                {% load static %}
+        <link rel="stylesheet" href="{% static 'mycss.css' %}">
+<!-- 
+        <script>
+            function confirmAppointment(event, docName, slot) {
+                event.preventDefault();
+            
+                var confirmation = window.confirm("Do you want to confirm the appointment with Doctor: " + docName + "\nAppointment slot: " + slot);
+            
+                if (confirmation) {
+                    // Generate PDF
+                    var pdf = new jsPDF();
+                    pdf.text("Doctor: " + docName, 20, 20);
+                    pdf.text("Appointment slot: " + slot, 20, 30);
+                    pdf.save("appointment_confirmation.pdf");
+                    event.target.submit();
+
+                    // You can redirect to another page if needed
+                    // window.location.href = "your_confirmation_page.html";
+                }
+            
+                return false; // To prevent the form from submitting
+            }
+            </script> -->
+
+            <!-- Inside the <head> tag -->
+                <script>
+                    function confirmAppointment(event, docName, slot, doc_id) {
+                        event.preventDefault();
+                    
+                        var confirmation = window.confirm("Do you want to confirm the appointment with Doctor: " + docName + "\nAppointment slot: " + slot);
+                    
+                        if (confirmation) {
+                            // Create a form element dynamically
+                            var form = document.createElement("form");
+                            form.method = "get";
+                            form.action = "http://localhost:8000/yes_appoin";  // Add your form action URL here
+                
+                            // Create hidden input fields for doc_name and slot
+                            var docNameInput = document.createElement("input");
+                            docNameInput.type = "hidden";
+                            docNameInput.name = "doc_name";
+                            docNameInput.value = docName;
+                            form.appendChild(docNameInput);
+                
+                            var slotInput = document.createElement("input");
+                            slotInput.type = "hidden";
+                            slotInput.name = "slot";
+                            slotInput.value = slot;
+                            form.appendChild(slotInput);
+                            
+                            var docidInput = document.createElement("input");
+                            docidInput.type = "hidden";
+                            docidInput.name = "doc_id";
+                            docidInput.value = doc_id;
+                            form.appendChild(docidInput);
+                
+                            // Append the form to the document body
+                            document.body.appendChild(form);
+                
+                            // Submit the form
+                            form.submit();
+                        }
+                    
+                        return false; // To prevent the form from submitting
+                    }
+                </script>
+                
+
+            
+    </head>
+
+    <body>
+       
+    
+
+                <nav class="navbar navbar-inverse" style="border-radius:0px !important; margin:0;border: 0">
+                    <div class="container-fluid">
+                        <div href="index.html" style="text-align: center;color: white">
+                          <h2>HealthHub</h2>
+                        </div>
+                    </div>
+                </nav>
+                
+
+                {% load static %}
+
+                <div class="background-wrapper" style="background-image: url(images/airline/cc.jpg);">
+
+
+                <div class="container-fluid">   
+                <header>
+                    <h2>Available Doctors</h2>
+                    <hr>
+                </header>
+                
+                    <div class="panel-group">
+                        <div class="panel panel-default panel-transparent">
+                            <div class="panel-heading">
+                                <legend style="text-align: center;color: black">Appointment Details</legend>
+                            </div>
+
+                            <div class="panel-body">
+                                <table class="table table-hover" style="color: rgb(114, 194, 223); font-size: 20px">
+                                    <thead>
+                                        <tr>
+                                              
+                                            <th>Doctor Name</th>
+                                            <th>Appointment Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for result in results %}                                 
+                                        <tr>
+                                            <form class="form-inline" method='get'>
+                                                {% csrf_token %}
+                                                {% load static %}
+                                                <td>{{ result.0 }}</td>
+                                                <td>{{ result.1.date|date:"Y-m-d" }} at {{ result.1.time|time:"h:i A" }}</td>
+                                                
+
+                                                <input type="hidden" value="{{ result.0 }}" name="doc_name">
+                                                <input type="hidden" value="{{ result.1 }}" name="slot">
+                                                <input type="hidden" value="{{ result.2 }}" name="doc_id">
+
+                                                <td><button type="button" class="btn btn-block form-control" style="background-color: rgb(35, 153, 237); color: rgb(242, 244, 245)" onclick="confirmAppointment(event, '{{ result.0 }}', '{{ result.1 }}','{{ result.2 }}')"><b>CONFIRM APPOINTMENT</b></button></td>
+                                            </form>
+                                        </tr>
+{% endfor %}
+                                    </tbody> 
+                              </table>
+                            </div>
+                        </div>
+                    </div>
+                
+                
+            <!-- Footer -->
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br> 
+            <br>
+            <br> 
+            <br>
+            <br> 
+            <footer id="footer">
+                <div class="container-fluid">
+                    <ul class="icons">
+                        <li><a href="#" class="fa fa-twitter" style="color: grey"></a></li>
+                        <li><a href="#" class="fa fa-facebook" style="color: grey"></a></li>
+                        <li><a href="#" class="fa fa-instagram" style="color: grey"></a></li>
+                        <li><a href="#" class="fa fa-envelope" style="color: grey"></a></li>
+                    </ul>
+                </div>
+                <div class="copyright">
+                    &copy; KIA-Management System. All rights reserved.
+                </div>
+            </footer>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+

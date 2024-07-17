@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px; /* Add margin for the whole page */
+        }
+
+        .title {
+            background-color: #3498db; /* Different color for the title */
+            color: #ecf0f1; /* Text color for the title */
+            border: 1px solid #2980b9; /* Border color for the title */
+            padding: 15px;
+            font-size: 28px;
+            text-align: center; /* Center the title */
+            margin-bottom: 20px; /* Add space below the title */
+        }
+
+        .section {
+            background-color: #f5f5f5; /* Light gray background for sections */
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 20px;
+            overflow: hidden; /* Clear the float */
+        }
+
+        .heading {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center; /* Center the heading */
+            margin-bottom: 10px;
+        }
+
+        .content {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .map-link {
+            color: #3498db; /* Blue color for the map link */
+            text-decoration: underline; /* Underline the map link */
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ecf0f1; /* Light background color for the footer */
+            border: 1px solid #bdc3c7; /* Border color for the footer */
+        }
+    </style>
+    <title>HealthHub Report</title>
+</head>
+<body>
+    <div class="title">HealthHub - Your Health, Our Priority</div>
+
+    {% if results %}
+        <div class="section">
+            <div class="heading">User Details:</div>
+            {% for result in results %}
+                <div class="content">
+                    <b>Registration Id:</b> {{ result.0 }}<br>
+                    <b>Name:</b> {{ result.1 }}<br>
+                    <b>Email:</b> {{ result.2 }}<br>
+                    <b>Mobile No:</b> {{ result.3 }}<br>
+                    <b>Age:</b> {{ result.4 }}<br>
+                    <b>Gender:</b> {{ result.5 }}<br>
+                    <b>Blood Group:</b> {{ result.6 }}<br>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="section">
+        <div class="heading">Doctor and Slot Details:</div>
+        <div class="content">
+            <b>Doctor Name:</b> {{ doc_name }}<br>
+            <b>Specialization:</b> {{ specialization }}<br>
+            <b>Slot:</b> {{ slot }}<br>
+            <b>Hospital Name:</b> <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination={{ hospital_name }}" target="_blank" rel="noopener noreferrer">{{ hospital_name }}</a><br>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for choosing HealthHub for your healthcare needs.</p>
+        <p>Contact us at support@healthhub.com or call 123-456-7890 for assistance.</p>
+    </div>
+</body>
+</html>

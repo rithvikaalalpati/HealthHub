@@ -1,0 +1,333 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    {% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Disease</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'dps.css' %}">   
+
+    <link rel="stylesheet" href="{% static 'mycss.css' %}">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins">
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'myjs.js' %}"></script>
+
+
+
+    <script>
+
+        /* When the user clicks on the button,
+      toggle between hiding and showing the dropdown content */
+      function Functionshow() {
+        
+        document.getElementById("searchbar").value = '';
+        document.getElementById("myDropdown").classList.toggle("show");
+         search_symptoms();
+        
+      }
+      
+      
+      // Close the dropdown menu if the user clicks outside of it
+      window.onclick = function(event) {
+        if (!event.target.matches('.btn')) {
+          if (!event.target.matches('.searchbardiv')){
+            if (!event.target.matches('.searchbar')){
+      
+          var dropdowns = document.getElementsByClassName("drop-content");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+            
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+              openDropdown.classList.remove('show');
+            }
+          }
+        }
+      }
+      }
+      }
+      
+        function Functionsymptoms(name) {
+          var newItem = document.createElement("TEXTAREA");
+          newItem.innerText = name;
+          newItem.setAttribute("id","symptoms");
+          
+          newItem.setAttribute("class","symptoms");
+          document.getElementById("sympbox").appendChild(newItem);
+          
+        }
+      
+       
+        //var elements = document.getElementsByClassName("symptoms");
+      
+      
+        function search_symptoms() { 
+          let input = document.getElementById('searchbar').value 
+          input=input.toLowerCase(); 
+          let x = document.getElementsByClassName('dropdown-item'); 
+            
+          for (i = 0; i < x.length; i++) {  
+              if (!x[i].innerHTML.toLowerCase().includes(input)) { 
+                  x[i].style.display="none"; 
+              } 
+              else { 
+                  x[i].style.display="inline-block";                  
+              } 
+          } 
+      } 
+      
+      
+      $(document).ready( function(){
+      
+      
+      $("#predict").click(function () {
+        event.preventDefault();
+      
+        var symptoms = document.getElementsByClassName("symptoms");
+        var noofsym = symptoms.length;
+        var symlist=[];
+      
+        if(noofsym == 0){
+           alert(" please add some symptoms ");
+        }
+      
+        else {
+      
+        for(i=0;i<symptoms.length;i++){
+          symlist[i]=symptoms[i].value;
+        }
+        
+      
+      
+        $("#resultdiv").show("slow");
+        $('html,body').animate({
+          scrollTop: $("#resultdiv").offset().top},
+          'slow');
+             
+      
+      
+      
+        $.ajax({
+            url: 'checkdisease',
+            type: "POST",
+            data: { "noofsym" : noofsym,
+                    "symptoms" :symlist,
+                    csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
+            },
+            dataType: 'json',
+      
+            success: function (data) {
+              document.getElementById('diseasefield').innerText = data["predicteddisease"];
+              document.getElementById('percentage').innerText = data["confidencescore"]+"%";
+
+              percent=data["confidencescore"];
+              disease=data["predicteddisease"];
+      
+              $('#percentage').css('width', percent + "%");
+      
+              document.getElementById('diseasesearch').innerText = data["predicteddisease"];
+      
+              $("#href").attr("href","https://www.google.com/search?q="+ disease +"");
+      
+              
+              document.getElementById('consultdoctor').innerText = data["consultdoctor"];
+              document.getElementById('patientName').innerText = "Patient name: " + data["namee"];
+              document.getElementById('patientAge').innerText = "Age: " + data["agee"];
+              // document.getElementById('pname').innerText = "Hello," + data["namee"];
+
+
+      
+            }
+            
+          });
+      
+        }
+      
+        });
+      
+      
+      
+      });
+      
+      
+      
+      </script>
+
+
+</head>
+
+<body data-spy="scroll" data-target="#myscroll">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-inverse" data-spy="affix" style="border-radius: 0; margin: 0; border: 0; width: 100%; top: 0; z-index: 9999 !important">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="http://localhost:8000/login">HealthHub</a>
+            </div>
+            <div class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" style="padding: 0 3rem 0 0">
+                    <li><a href="http://localhost:8000/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right" style="padding: 0 3rem 0 0">
+                    <!-- <li><a><span id="pname" class="glyphicon "></span><b>Hello, </b> </a></li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="container" data-spy="affix" style="margin: 0; bottom: 0; float: left; top: 5rem; width: 20%; height: 100%; background-color: #222222">
+        <ul class="nav nav-pills nav-stacked" style="border-radius: 0">
+            <li>
+                <a href="#" id="m1">Dashboard</a>
+                <ul id="sub1" style="padding: 0 0 0 0">
+                    <div class="list-group">
+                        <li><a href="http://localhost:8000/login/" class="list-group-item">Home</a></li>
+                        <br>
+                        <li><a href="http://localhost:8000/queries" class="list-group-item">Patient Queries</a></li>
+                        <br>
+                        <li><a href="http://localhost:8000/staffwebcheckin" class="list-group-item">What's My Disease</a></li>
+                    </div>
+                </ul>
+            </li>
+           
+        </ul>
+    </div>
+
+    <div class="background-wrapper" style="background-image: url({% static 'air10.jpg' %}); width: 80%; height: 100%;  float: right;">
+        <div id="myscroll" class="container" style="margin-left: 0; margin-top: 12rem; float: right; width:100%; padding: 0 5rem 5rem 5rem">
+
+
+            
+             
+              <div class="container">
+                <div class="container">
+                  <br>
+                  <div class="text-center"> 
+                    <h3>
+                      Decode Your Symptoms and Explore Potential Conditions and Treatments!
+                    </h3><br>
+                          <button onclick="Functionshow()" class="btn btn-primary dropdown-toggle">Add symptoms</button>
+                  </div>
+                </div >
+              
+                <div id="myDropdown" class="drop-content">
+              
+                      <div id="searchbardiv" class="searchbardiv">    
+                    
+                          <input id="searchbar" class="searchbar" onkeyup="search_symptoms()" type="text"
+                            name="search" placeholder=" Search symptoms.. "> <br>
+                      </div> 
+              
+                      <div class="container" id="container-dropdown">
+                          {% for i in list2 %}
+                          
+                          <a class="dropdown-item" onclick="Functionsymptoms(this.textContent)">{{i}}</a>
+                          
+                          {% endfor %}
+                      </div>
+                </div>
+                 
+              <br><br>
+                <div class="text-center">
+                      <div class="card" id= "symptoms-box">
+                  
+                    {% csrf_token %}
+                          <div class="card-header">Symptoms list -</div>
+                                  <div class="card-body" id="sympbox" >
+                                  </div>
+                                        <br>
+                                        <div class="card-footer">
+                                              <button id="predict" class="btn btn-success">Predict</button>
+                                        </div>
+                           </div>
+                      </div>
+                </div>
+              
+                <br>
+              
+                <div id="resultdiv" style="display: none;" >
+                      <div class="text-center">
+                            <div class="card" id="predicted-data">
+                              <div class="card-header">
+                                <span id="patientName">Patient name: </span>
+                                <span id="patientAge">Age: </span>
+                            </div>
+                            
+                                  <div>                    {% csrf_token %}
+
+                                  <span class="diseasefield" >predicted disease is :</span><span class="diseasefield" id="diseasefield" style="color: #092700; text-shadow: 2px 2px 4px rgb(36, 255, 45);"></span> <br>
+                             
+                                  <span class="diseasefield">confidence score of :</span>
+                                  <span>
+                                        <div class="progress" style="display: inline-block;width:140px">
+                                            <div id="percentage" class="progress-bar" style="width: 0%">0%
+                                            </div>
+                                        </div>
+                                  </span>
+              
+                                  </div>
+                            </div>
+                            <br>   <br>
+                      <div class="text-center mt-4 mb-4"> 
+                            <button class="btn btn-outline-success">
+                                  <a id="href" href="https://www.google.com/search?q=anuj" target="_blank" rel="noopener noreferrer">Click here to know more about &nbsp 
+                                  <span id="diseasesearch" style="color: crimson;"></span></a>
+                            </button>
+                      </div>
+                        <br><br>
+              
+                      <div class="text-center">
+                       
+                        </h4>
+                      <br><br>
+              
+                      </div>
+              
+              
+              <div class="mx-auto text-center " style="width:350px">
+                
+                   
+                      <div >  <form action="http://127.0.0.1:8000/booking" method="get">
+                          {% csrf_token %} 
+                          <button id="consultbtn" type="submit" class="btn btn-primary"> Consult a <span id="consultdoctor"  name="consultdoctor" > </span> doctor</button>
+                        </form>
+                      </div>
+              </div>
+              </div>
+              </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("#m1").click({ param1: "#sub1", param2: "#sub2", param3: "#sub3", param4: "#sub4" }, navbar_movment);
+        $("#m2").click({ param1: "#sub2", param2: "#sub1", param3: "#sub3", param4: "#sub4" }, navbar_movment);
+        $("#m3").click({ param1: "#sub3", param2: "#sub1", param3: "#sub2", param4: "#sub4" }, navbar_movment);
+        $("#m4").click({ param1: "#sub4", param2: "#sub1", param3: "#sub2", param4: "#sub3" }, navbar_movment);
+
+    
+
+        
+    </script>
+
+
+  
+</body>
+
+</html>
