@@ -80,13 +80,13 @@ HealthHub is a comprehensive full-stack healthcare application designed to empow
 ![Home Page](/output/home.jpeg)
 
 ### Patient Page
-![Patient Page](screenshots/patient.png)
+![Patient Page](/output/patient_login.jpeg)
 
 ### Doctor Page
-![Doctor Page](screenshots/doctor.png)
+![Doctor Page](output/doctor_login.jpeg))
 
 ### Admin Page
-![Admin Page](screenshots/admin.png)
+![Admin Page](output/login.jpeg))
 
 ## Contributors
 - **P Nandieswar Reddy** - BL.EN. U4AIE20046
