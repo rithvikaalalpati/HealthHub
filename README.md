@@ -77,7 +77,7 @@ HealthHub is a comprehensive full-stack healthcare application designed to empow
 
 ## Screenshots
 ### Home Page
-![Home Page](/outputs/home.jpeg)
+![Home Page](/output/home.jpeg)
 
 ### Patient Page
 ![Patient Page](screenshots/patient.png)
