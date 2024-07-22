@@ -32,7 +32,7 @@ HealthHub is a comprehensive full-stack healthcare application designed to empow
 ## Installation
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/yourusername/HealthHub.git
+    git clone https://github.com/saiaswath07/HealthHub.git
     ```
 2. **Navigate to the project directory:**
     ```sh
@@ -77,7 +77,7 @@ HealthHub is a comprehensive full-stack healthcare application designed to empow
 
 ## Screenshots
 ### Home Page
-![Home Page](screenshots/home.png)
+![Home Page](/outputs/home.jpeg)
 
 ### Patient Page
 ![Patient Page](screenshots/patient.png)
